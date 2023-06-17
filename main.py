@@ -9,6 +9,7 @@ URL = "https://cars.av.by/filter?price_usd[min]=10000&price_usd[max]=12500&trans
 async def main():
     tasks = []
 
+    db = await main_async()
     task = asyncio.create_task(scrape(URL))
     tasks.append(task)
 
