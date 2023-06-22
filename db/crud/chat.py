@@ -4,7 +4,7 @@ CRUD Operations for Chat Endpoint
 
 from db.mongodb import AsyncIOMotorClient
 from models.chat import BaseChatCreate, BaseChat
-from core.settings import mongo_db
+from core.config import mongo_db
 
 mongo_collection = "api_chat"  # the collection for the chat model
 
