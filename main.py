@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram import Bot, Dispatcher
 
@@ -8,10 +9,14 @@ from database.mongodb import MongoAdapter
 from app.middlewares.middleware import MongoMiddleware
 
 
+logger = logging.getLogger(__name__)
+
+
 async def main():
+    logging.basicConfig(level=logging.INFO)
     bot = Bot(token=settings.API_TOKEN)
     dp = Dispatcher(bot)
-    db = MongoAdapter(mongo_url=f"{settings.MONGO_URL}{settings.DB_NAME}")
+    db = MongoAdapter(db_host=settings.HOST, db_user=settings.USER, db_password=settings.PASSWORD)
     dp.middleware.setup(MongoMiddleware(db))
     register_handlers(dp)
     session = await bot.get_session()

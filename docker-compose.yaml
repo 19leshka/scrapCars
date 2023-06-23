@@ -5,14 +5,14 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - db
-    environment:
-      - MONGO_URI=mongodb://database:27017/mydatabase
+      - mongo
     command: python main.py
 
-  db:
+  mongo:
     image: mongo
-    restart: always
+    restart: on-failure
     volumes:
-      - ./db_data:/data/database
+      - ./mongo_data:/data/database
 
+volumes:
+  mongo-data:

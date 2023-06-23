@@ -5,8 +5,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 
 class MongoAdapter:
-    def __init__(self, mongo_url: str) -> None:
-        self.client = AsyncIOMotorClient(mongo_url)
+    def __init__(self, db_host: str, db_user: str, db_password: str) -> None:
+        self.client = AsyncIOMotorClient(f"mongodb://{db_user}:{db_password}@{db_host}", 27017)
 
     def on_shutdown(self):
         self.client.close()

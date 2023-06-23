@@ -3,7 +3,9 @@ from pydantic import BaseSettings, Field
 
 class Settings(BaseSettings):
     DB_NAME: str = Field(..., env='DATABASE_NAME')
-    MONGO_URL: str = Field(..., env='MONGO_URL')
+    USER: str = Field(..., env='USER')
+    PASSWORD: str = Field(..., env='PASSWORD')
+    HOST: str = Field(..., env='HOST')
 
     API_TOKEN: str = Field(..., env='TELEGRAM_API_TOKEN')
 
