@@ -7,12 +7,12 @@ services:
     depends_on:
       - db
     environment:
-      - MONGO_URI=mongodb://db:27017/mydatabase
+      - MONGO_URI=mongodb://database:27017/mydatabase
     command: python main.py
 
   db:
     image: mongo
     restart: always
     volumes:
-      - ./db_data:/data/db
+      - ./db_data:/data/database
 

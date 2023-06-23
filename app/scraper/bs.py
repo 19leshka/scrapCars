@@ -1,7 +1,7 @@
 import aiohttp
 from bs4 import BeautifulSoup
 
-from services.av import AVbyService
+from app.services.av import AVbyService
 
 
 async def scrape(url: str):

@@ -1,6 +1,6 @@
 from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
 
-from db.mongodb import MongoAdapter
+from database.mongodb import MongoAdapter
 
 
 class MongoMiddleware(LifetimeControllerMiddleware):
@@ -11,7 +11,7 @@ class MongoMiddleware(LifetimeControllerMiddleware):
         self.db = db
 
     async def pre_process(self, obj, data, *args):
-        data["db"] = self.db
+        data["database"] = self.db
 
     async def post_process(self, obj, data, *args):
-        del data["db"]
+        del data["database"]

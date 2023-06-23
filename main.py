@@ -2,10 +2,10 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 
-from core.config import settings
-from bot.handler import register_handlers
-from db.mongodb import MongoAdapter
-from middleware import MongoMiddleware
+from app.core.config import settings
+from app.bot.handler import register_handlers
+from database.mongodb import MongoAdapter
+from app.middlewares.middleware import MongoMiddleware
 
 
 async def main():

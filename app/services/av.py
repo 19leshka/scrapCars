@@ -1,4 +1,4 @@
-from services.service import Service
+from app.services.service import Service
 
 
 class AVbyService(Service):
