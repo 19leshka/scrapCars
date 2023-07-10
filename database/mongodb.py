@@ -1,16 +1,26 @@
-"""
-MongoDB
-"""
-from motor.motor_asyncio import AsyncIOMotorClient
+import logging
+
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+
+from app.core.config import settings
 
 
 class MongoAdapter:
-    def __init__(self, db_host: str, db_user: str, db_password: str) -> None:
-        self.client = AsyncIOMotorClient(f"mongodb://{db_user}:{db_password}@{db_host}", 27017)
+    def __init__(self) -> None:
+        try:
+            self.client = AsyncIOMotorClient(
+                        host=settings.HOST,
+                        username=settings.USER,
+                        password=settings.PASSWORD
+                    )
+            logging.info('Connected to mongo.')
+        except Exception as e:
+            logging.exception(f'Could not connect to mongo: {e}')
+            raise e
 
-    def on_shutdown(self):
+    async def on_shutdown(self):
         self.client.close()
 
-    def get_collection(self, db_name: str, collection_name: str):
+    async def get_collection(self, db_name: str, collection_name: str) -> AsyncIOMotorCollection:
         return self.client.get_database(db_name).get_collection(collection_name)
 
