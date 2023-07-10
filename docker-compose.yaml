@@ -11,8 +11,13 @@ services:
   mongo:
     image: mongo
     restart: on-failure
+    ports:
+      - 27018:27017
     volumes:
-      - ./mongo_data:/data/database
+      - mongo-data:/data/database
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$USER
+      - MONGO_INITDB_ROOT_PASSWORD=$PASSWORD
 
 volumes:
   mongo-data:
