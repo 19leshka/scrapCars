@@ -11,7 +11,7 @@ class MongoMiddleware(LifetimeControllerMiddleware):
         self.db = db
 
     async def pre_process(self, obj, data, *args):
-        data["database"] = self.db
+        data["client"] = self.db
 
     async def post_process(self, obj, data, *args):
-        del data["database"]
+        del data["client"]
