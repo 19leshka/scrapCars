@@ -1,12 +1,19 @@
 """
 CRUD Operations for Chat Endpoint
 """
+import logging
+from dataclasses import asdict
 
-from database.mongodb import AsyncIOMotorClient
-from database.models.chat import BaseChatCreate, BaseChat
-from app.core.config import mongo_db
+from aiogram.types import Chat
 
-mongo_collection = "api_chat"  # the collection for the chat model
+from database.mongodb import AsyncIOMotorClient, MongoAdapter
+from database.models.chat import BaseChatCreate, BaseChat, ChatSchema
+from app.core.config import settings
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+mongo_collection = 'Users'
 
 
 async def total_docs_in_db(conn: AsyncIOMotorClient) -> int:
@@ -15,7 +22,7 @@ async def total_docs_in_db(conn: AsyncIOMotorClient) -> int:
     :param conn: AsyncIOMotorClient connection
     :return: INT count of the total docs in mongodb or 0 if none
     """
-    return await conn[mongo_db][mongo_collection].count_documents({})
+    return await conn[settings.DB_NAME][mongo_collection].count_documents({})
 
 
 async def get_all(conn: AsyncIOMotorClient) -> dict:
@@ -26,7 +33,7 @@ async def get_all(conn: AsyncIOMotorClient) -> dict:
     """
     total_docs = await total_docs_in_db(conn)
     docs = []
-    async for doc in conn[mongo_db][mongo_collection].find():
+    async for doc in conn[settings.DB_NAME][mongo_collection].find():
         docs.append(BaseChat(**doc).dict())
 
     if docs:
@@ -34,34 +41,35 @@ async def get_all(conn: AsyncIOMotorClient) -> dict:
 
 
 async def get_chat_by_id(
-        conn: AsyncIOMotorClient,
+        adapter: MongoAdapter,
         chat_id: int
-) -> BaseChat:
+) -> ChatSchema:
     """Get user info
+    :param adapter: MongoAdapter
     :param chat_id: Telegram chat id
-    :param conn: AsyncIOMotorClient connection
     :return: BaseChat of a chat found or None
     """
-    row = await conn[mongo_db][mongo_collection].find_one({"chat_id": chat_id})
+    collection = await adapter.get_collection(settings.DB_NAME, mongo_collection)
+    row = await collection.find_one({'id': chat_id})
+    logger.info(f"Find one: {row}")
     if row:
-        return BaseChat(**row)
+        return ChatSchema(**row)
 
 
 async def create_chat(
-        conn: AsyncIOMotorClient,
-        chat: BaseChatCreate
-) -> BaseChat:
+        adapter: MongoAdapter,
+        chat: Chat
+) -> ChatSchema:
     """Create a New API User.
     Created API Key is not stored in the database. It will be sent to browser and an email
     sent to the email id provided, for the user to confirm the email id.
-    :param conn: AsyncIOMotorClient connection
-    :param chat: BaseChatCreate model
+    :param adapter: MongoAdapter
+    :param chat: Chat model
     :return: NEW API KEY as STR or None
     """
-    api_chat = BaseChat(**chat.dict())
-
-    row = await conn[mongo_db][mongo_collection].insert_one(api_chat.dict())
-
+    api_chat = dict(chat)
+    collection = await adapter.get_collection(settings.DB_NAME, mongo_collection)
+    result = await collection.insert_one(api_chat)
     return api_chat
 
 
