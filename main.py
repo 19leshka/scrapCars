@@ -9,14 +9,14 @@ from database.mongodb import MongoAdapter
 from app.middlewares.middleware import MongoMiddleware
 
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
     bot = Bot(token=settings.API_TOKEN)
     dp = Dispatcher(bot)
-    db = MongoAdapter(db_host=settings.HOST, db_user=settings.USER, db_password=settings.PASSWORD)
+    db = MongoAdapter()
     dp.middleware.setup(MongoMiddleware(db))
     register_handlers(dp)
     session = await bot.get_session()
