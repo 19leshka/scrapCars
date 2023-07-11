@@ -31,3 +31,11 @@ class BaseRepository:
     async def total_docs_in_db(cls, adapter):
         collection = await adapter.get_collection(settings.DB_NAME, cls.Collection)
         return await collection.count_documents({})
+
+    @classmethod
+    async def update_by_id(cls, adapter: MongoAdapter, key: int, update_data):
+        collection = await adapter.get_collection(settings.DB_NAME, cls.Collection)
+        result = await collection.update_one({'id': key}, {'$set': update_data})
+        if result.modified_count > 0:
+            return True
+        return False
