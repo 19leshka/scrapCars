@@ -9,6 +9,9 @@ class Settings(BaseSettings):
 
     API_TOKEN: str = Field(..., env='TELEGRAM_API_TOKEN')
 
+    CELERY_BROKER_URL: str = Field(..., env='CELERY_BROKER_URL')
+    CELERY_RESULT_BACKEND: str = Field(..., env='CELERY_RESULT_BACKEND')
+
     class Config:
         env_file = '.env'
 
