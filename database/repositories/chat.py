@@ -72,39 +72,3 @@ async def create_chat(
     result = await collection.insert_one(api_chat)
     return api_chat
 
-
-
-# async def update_chat(
-#         conn: AsyncIOMotorClient,
-#         chat_id: int,
-#         user: BaseUserUpdate
-# ) -> BaseUserInDB:
-#     """Update a user with new details
-#     :param conn: AsyncIOMotorClient connection
-#     :param chat_id: chat_id of the user to update details
-#     :param user: BaseUserUpdate model
-#     :return: BaseUserInDB of a user found or None
-#     """
-#     api_user = await get_chat_by_id(conn, chat_id)
-#
-#     api_user.salt = user.salt or api_user.salt
-#     api_user.hashed_api_key = user.hashed_api_key or api_user.hashed_api_key
-#
-#     api_user.endpoint_access = user.endpoint_access or api_user.endpoint_access
-#     api_user.is_active = user.is_active or api_user.is_active
-#
-#     if user.disabled is not None:
-#         api_user.disabled = user.disabled
-#
-#     if user.is_active is not None:
-#         api_user.is_active = user.is_active
-#
-#     if user.is_superuser is not None:
-#         api_user.is_superuser = user.is_superuser
-#
-#     api_user.updated_at = datetime.utcnow()
-#     updated_at = await conn[mongo_db][mongo_collection].update_one(
-#         {"email": api_user.email}, {'$set': api_user.dict()}
-#     )
-#
-#     return api_user
