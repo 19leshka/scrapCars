@@ -12,6 +12,8 @@ pydantic = {extras = ["dotenv"], version = "^1.10.9"}
 motor = "^3.2.0"
 bs4 = "^0.0.1"
 aiohttp = "^3.8.4"
+celery = {extras = ["beat"], version = "^5.3.1"}
+redis = "^4.6.0"
 
 
 [build-system]
