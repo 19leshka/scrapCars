@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = Field(..., env='CELERY_BROKER_URL')
     CELERY_RESULT_BACKEND: str = Field(..., env='CELERY_RESULT_BACKEND')
 
+    SCRAPE_URL: str = Field(..., env='SCRAPE_URL')
+
     class Config:
         env_file = '.env'
 

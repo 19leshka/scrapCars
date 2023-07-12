@@ -15,7 +15,9 @@ class AVbyService(Service):
             el["year"] = params[0].text
             el["characteristics"] = f'{params[1].text}, {params[2].find("span").text}'
             el["location"] = item.find("div", class_="listing-item__location").text
-            el["text"] = item.find("div", class_="listing-item__message").findChildren("div", recursive=False)[0].text
-            print(el["id"])
+            try:
+                el["text"] = item.find("div", class_="listing-item__message").findChildren("div", recursive=False)[0].text
+            except AttributeError:
+                el["text"] = ""
             cars.append(el)
         return cars

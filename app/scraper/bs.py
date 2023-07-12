@@ -10,4 +10,5 @@ async def scrape(url: str):
             body = await resp.text()
             soup = BeautifulSoup(body, 'html.parser')
             listing_items = soup.findAll(class_="listing-item")
-            await AVbyService.parse_items(listing_items)
+            cars = await AVbyService.parse_items(listing_items)
+            return cars

@@ -4,7 +4,9 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from app.core.config import settings
+from app.core.setup import setup
 from app.bot.handler import register_handlers
+from app.scraper.bs import scrape
 from database.mongodb import MongoAdapter
 from app.middlewares.middleware import MongoMiddleware
 
@@ -16,10 +18,11 @@ logger = logging.getLogger(__name__)
 async def main():
     bot = Bot(token=settings.API_TOKEN)
     dp = Dispatcher(bot)
-    db = MongoAdapter()
-    dp.middleware.setup(MongoMiddleware(db))
+    setup.DB = MongoAdapter()
+    dp.middleware.setup(MongoMiddleware(setup.DB))
     register_handlers(dp)
     session = await bot.get_session()
+    # res = await scrape(settings.SCRAPE_URL)
     try:
         await dp.start_polling()
     finally:
