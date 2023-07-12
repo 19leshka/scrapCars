@@ -24,7 +24,8 @@ async def get_link(message: Message, client: AsyncIOMotorClient):
     logger.info(message.text)
     elem = {
         'id': message.chat.id,
-        'link': message.text
+        'link': message.text,
+        'latest_id': None
     }
     if await AVRepository.get_one(client, message.chat.id):
         await AVRepository.update_by_id(client, message.chat.id, elem)
