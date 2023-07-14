@@ -20,9 +20,9 @@ async def main():
     dp = Dispatcher(bot)
     setup.DB = MongoAdapter()
     dp.middleware.setup(MongoMiddleware(setup.DB))
+    logger.info(type(setup.DB))
     register_handlers(dp)
     session = await bot.get_session()
-    # res = await scrape(settings.SCRAPE_URL)
     try:
         await dp.start_polling()
     finally:

@@ -22,13 +22,13 @@ class BaseRepository:
         collection = await adapter.get_collection(settings.DB_NAME, cls.Collection)
         docs = []
         async for doc in collection.find():
-            docs.append(doc.dict())
+            docs.append(doc)
 
         if docs:
             return {"chats": docs}
 
     @classmethod
-    async def total_docs_in_db(cls, adapter):
+    async def total_docs_in_db(cls, adapter: MongoAdapter):
         collection = await adapter.get_collection(settings.DB_NAME, cls.Collection)
         return await collection.count_documents({})
 
