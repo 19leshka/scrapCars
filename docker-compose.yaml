@@ -34,6 +34,18 @@ services:
       - app
       - redis
 
+  celerybeat:
+    build: .
+    command: celery -A app.core.celery_config beat -l INFO
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - app
+      - redis
+
   redis:
     image: redis
     restart: on-failure
